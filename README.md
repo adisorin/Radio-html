@@ -1,4 +1,5 @@
 # Radio-html
 An html file with which you can open a modern graphic of a radio "device" with online stations.
+![Radio-HTML](https://github.com/user-attachments/assets/f195e560-a0bf-4d44-a0d3-41b65d606fa6)
 
-![Radio-HTML](https://github.com/user-attachments/assets/0a2d8d43-8cfa-42c8-9db1-b85a3fc5c0f9)
+
