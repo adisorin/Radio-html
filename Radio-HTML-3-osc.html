@@ -1,0 +1,302 @@
+<!DOCTYPE html> 
+<html lang="ro"> 
+<head> 
+<meta charset="UTF-8"> 
+<title>Posturi Radio Online</title> 
+<style> 
+    body { 
+        font-family: "Segoe UI", sans-serif; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh; 
+        margin: 0; 
+        background: linear-gradient(120deg, #0078d7, #00a1ff, #005fa3); 
+        background-size: 300% 300%; 
+        animation: bgMove 10s infinite alternate; 
+    } 
+    @keyframes bgMove { 
+        0% { background-position: 0% 50%; } 
+        100% { background-position: 100% 50%; } 
+    } 
+    .radio-container { 
+        background-color: #ffffffdd; 
+        padding: 30px; 
+        border-radius: 15px; 
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2); 
+        text-align: center; 
+        width: 380px; 
+        backdrop-filter: blur(8px); 
+        transition: transform 0.3s; 
+    } 
+    .radio-container:hover { 
+        transform: translateY(-5px); 
+    } 
+    audio { 
+        width: 100%; 
+        margin-top: 10px; 
+    } 
+    .controls { 
+        margin-top: 15px; 
+    } 
+    .controls button { 
+        padding: 10px 18px; 
+        margin: 5px; 
+        font-size: 16px; 
+        cursor: pointer; 
+        border: none; 
+        border-radius: 8px; 
+        background: linear-gradient(145deg, #0078d7, #005fa3); 
+        color: white; 
+        box-shadow: 3px 3px 6px #004a82, -3px -3px 6px #009aff; 
+        transition: all 0.2s ease; 
+    } 
+    .controls button:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 4px 4px 8px #004a82, -4px -4px 8px #009aff; 
+    } 
+    .controls button:active { 
+        transform: translateY(2px); 
+        box-shadow: inset 2px 2px 5px #004a82, inset -2px -2px 5px #009aff; 
+    } 
+    .station-name { 
+        font-weight: bold; 
+        margin-top: 10px; 
+        color: #333; 
+        font-size: 1.2em; 
+        text-shadow: 0 0 8px rgba(0,0,0,0.1); 
+        animation: fadeIn 0.6s ease; 
+    } 
+    @keyframes fadeIn { 
+        from { opacity: 0; transform: scale(0.95); } 
+        to { opacity: 1; transform: scale(1); } 
+    } 
+    h3 { 
+        color: #005fa3; 
+        margin-bottom: 5px; 
+        display: inline-block; 
+        transform-origin: center; 
+        animation: coinFlip 15s infinite linear; 
+    } 
+    @keyframes coinFlip { 
+        0% { transform: rotateY(0deg); } 
+        25% { transform: rotateY(180deg); } 
+        50% { transform: rotateY(360deg); } 
+        75% { transform: rotateY(540deg); } 
+        100% { transform: rotateY(720deg); } 
+    } 
+    /* Lista posturilor */ 
+    .station-list { 
+        margin-top: 20px; 
+        text-align: left; 
+        max-height: 200px; 
+        overflow-y: auto; 
+        padding: 10px; 
+        border-top: 1px solid #ccc; 
+    } 
+    .station-list ul { 
+        list-style: none; 
+        padding-left: 0; 
+        margin: 5px 0; 
+    } 
+    .station-list li { 
+        padding: 5px 8px; 
+        cursor: pointer; 
+        border-radius: 5px; 
+        transition: all 0.2s ease; 
+    } 
+    .station-list li:hover { 
+        background-color: #0078d7; 
+        color: white; 
+    }
+    /* Stil pentru canvas */
+    #visualizer {
+        width: 100%;
+        height: 100px;
+        background-color: #eee;
+        border-radius: 5px;
+        margin-top: 15px;
+        border: 1px solid #ccc;
+    }
+</style> 
+</head> 
+<body> 
+<div class="radio-container"> 
+    <h3>🎧 Ascultă Radio </h3> 
+    <div class="station-name" id="station-name">Se încarcă...</div> 
+    <audio id="radio-audio" controls autoplay crossorigin="anonymous"> 
+        <source src="" type="audio/mpeg"> 
+        Browserul tău nu suportă elementul audio. 
+    </audio> 
+    <!-- Elementul canvas pentru oscilograma -->
+    <canvas id="visualizer"></canvas> 
+    <div class="controls"> 
+        <button onclick="prevStation()">⏮ Radio anterior</button> 
+        <button onclick="nextStation()">Radio următor ⏭</button> 
+    </div> 
+    <div class="controls"> 
+        <button onclick="seekBackward()">⏪ -10s</button> 
+        <button onclick="seekForward()">+10s ⏩</button> 
+    </div> 
+    <div class="station-list"> 
+        <strong>Lista posturilor:</strong> 
+        <ul id="stations-ul"></ul> 
+		 <p class="mt-2 muted">
+        Created by AdiSorin © 2025 • 
+		 <a href="https://github.com/adisorin?tab=repositories" target="_blank" title="GitHub">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" 
+               alt="GitHub" width="32" height="32" style="filter:invert(1); opacity:0.8; margin-left:10px;">
+        </a>
+      </p>
+    </div> 
+</div> 
+<script> 
+    const stations = [ 
+        { name: "Pro FM", url: "https://edge126.rcs-rds.ro/profm/profm.mp3" }, 
+        { name: "Digi FM", url: "https://edge76.rcs-rds.ro/digifm/digifm.mp3" }, 
+        { name: "RADIO-HOT", url: "http://mp3.radiohot.ro:8000/stream" }, 
+        { name: "RADIOINTENS-populara", url: "http://asculta-populara.radiointens.ro:8010/stream" }, 
+        { name: "RADIO-PARADISE", url: "https://stream.radioparadise.com/mp3-192" }, 
+        { name: "RADIO HOST", url: "https://ilm.stream35.radiohost.de/ilm_iloveradio_mp3-192?upd-meta&upd-scheme=https&_art=dD0xNzYyNjI5MzQyJmQ9MGZkODk3NzhkMGUyNzU0Nzc0OTE" }, 
+        { name: "SomaFM Lush (US)", url: "https://ice.somafm.com/lush-128-mp3" }, 
+        { name: "SomaFM Indie Pop Rocks (US)", url: "https://ice.somafm.com/indiepop-128-mp3" }, 
+        { name: "SomaFM Secret Agent (US)", url: "https://ice.somafm.com/secretagent-128-mp3" }, 
+        { name: "SomaFM Digitalis (US)", url: "https://ice.somafm.com/digitalis-128-mp3" }, 
+        { name: "SomaFM Beat Blender (US)", url: "https://ice.somafm.com/beatblender-128-mp3" },
+		{ name: "SomaFM Groove Salad (US)", url: "https://ice.somafm.com/groovesalad-256-mp3" }
+    ]; 
+    const audioPlayer = document.getElementById("radio-audio"); 
+    const stationName = document.getElementById("station-name"); 
+    const stationsUl = document.getElementById("stations-ul"); 
+    const seekTime = 10; 
+    let currentStation = 0; 
+
+    // --- Cod nou pentru oscilogramă (Web Audio API) ---
+    let audioContext;
+    let analyser;
+    let source;
+    const canvas = document.getElementById('visualizer');
+    const canvasCtx = canvas.getContext('2d');
+    const intendedWidth = canvas.width;
+    const intendedHeight = canvas.height;
+
+    // Inițializează AudioContext la prima interacțiune a utilizatorului
+    // Aceasta este necesară pentru politicile moderne de autoplay/securitate
+    document.body.addEventListener('click', initAudioContext, { once: true });
+
+    function initAudioContext() {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            // Important: Trebuie să setăm atributul crossorigin="anonymous" pe elementul audio din HTML
+            // pentru a evita erorile CORS la accesarea datelor audio din surse externe.
+            source = audioContext.createMediaElementSource(audioPlayer);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            analyser.fftSize = 2048; // Dimensiunea eșantionului de date
+            const bufferLength = analyser.fftSize;
+            const dataArray = new Uint8Array(bufferLength);
+            draw(analyser, dataArray, bufferLength, canvas, canvasCtx, intendedWidth, intendedHeight);
+        } catch (e) {
+            console.error('Web Audio API nu este suportat în acest browser sau a eșuat la inițializare:', e);
+        }
+    }
+
+    // Funcția principală de desenare care se apelează recurent prin requestAnimationFrame
+    function draw(analyser, dataArray, bufferLength, canvas, canvasCtx, width, height) {
+        requestAnimationFrame(() => draw(analyser, dataArray, bufferLength, canvas, canvasCtx, width, height));
+
+        // Obține datele de undă (waveform data)
+        analyser.getByteTimeDomainData(dataArray);
+
+        canvasCtx.fillStyle = 'rgb(238, 238, 238)'; // Culoarea de fundal a canvasului
+        canvasCtx.fillRect(0, 0, width, height);
+
+        canvasCtx.lineWidth = 2;
+        canvasCtx.strokeStyle = 'rgb(0, 120, 215)'; // Culoarea liniei (albastru din tema ta)
+
+        canvasCtx.beginPath();
+
+        const sliceWidth = width * 1.0 / bufferLength;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+            // dataArray[i] este între 0 și 255. Vrem să mapăm această valoare la înălțimea canvasului.
+            const v = dataArray[i] / 128.0; // Valoare mapată între ~0 și ~2
+            const y = v * height / 2; // Poziția Y pe canvas, centrată vertical
+
+            if (i === 0) {
+                canvasCtx.moveTo(x, y);
+            } else {
+                canvasCtx.lineTo(x, y);
+            }
+
+            x += sliceWidth;
+        }
+
+        canvasCtx.lineTo(width, height / 2); // Închide linia la mijlocul marginii drepte
+        canvasCtx.stroke();
+    }
+    // --- Sfârșitul codului pentru oscilogramă ---
+
+    function loadStation(index) { 
+        // Verifică și reia contextul audio dacă este suspendat (comun pe iOS/browsere mobile)
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
+        const station = stations[index]; 
+        stationName.textContent = station.name; 
+        stationName.style.animation = "none"; 
+        void stationName.offsetWidth; // Trigger reflow
+        stationName.style.animation = "fadeIn 0.6s ease"; 
+        audioPlayer.src = station.url; 
+        audioPlayer.play().catch(e => console.error("Redarea a eșuat:", e)); 
+        currentStation = index; 
+        updateStationListUI();
+    } 
+
+    function nextStation() { 
+        currentStation = (currentStation + 1) % stations.length; 
+        loadStation(currentStation); 
+    } 
+
+    function prevStation() { 
+        currentStation = (currentStation - 1 + stations.length) % stations.length; 
+        loadStation(currentStation); 
+    } 
+
+    function seekForward() {
+        if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+            audioPlayer.currentTime = Math.min(audioPlayer.currentTime + seekTime, audioPlayer.duration);
+        }
+    }
+
+    function seekBackward() {
+        audioPlayer.currentTime = Math.max(audioPlayer.currentTime - seekTime, 0);
+    }
+
+    function createStationList() {
+        stations.forEach((station, index) => {
+            const li = document.createElement("li");
+            li.textContent = station.name;
+            li.onclick = () => loadStation(index);
+            stationsUl.appendChild(li);
+        });
+    }
+
+    function updateStationListUI() {
+        const items = stationsUl.querySelectorAll("li");
+        items.forEach((item, index) => {
+            item.style.fontWeight = index === currentStation ? "bold" : "normal";
+            item.style.backgroundColor = index === currentStation ? "#0078d7" : "transparent";
+            item.style.color = index === currentStation ? "white" : "inherit";
+        });
+    }
+
+    // Inițializare
+    createStationList();
+    loadStation(currentStation); 
+</script> 
+</body> 
+</html>
