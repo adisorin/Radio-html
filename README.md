@@ -9,7 +9,9 @@ You don't need to install anything on your device, phone or PC. Just two clicks 
 ## 🎧 **Presentation: Online Radio Player Web App**
 
 **Author:** Sorinesu Adrian
+
 **Year:** 2025
+
 **Languages Used:** HTML5, CSS3, JavaScript (with Web Audio API)
 
 
