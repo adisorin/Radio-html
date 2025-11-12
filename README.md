@@ -8,10 +8,6 @@ You don't need to install anything on your device, phone or PC. Just two clicks 
 
 ## 🎧 **Presentation: Online Radio Player Web App**
 
-**Author:** Sorinesu Adrian
-
-**Year:** 2025
-
 **Languages Used:** HTML5, CSS3, JavaScript (with Web Audio API)
 
 
@@ -74,3 +70,5 @@ It serves as both an **educational and practical example** of how to combine HTM
 ### 🏁 **Conclusion**
 The *“Online Radio Player”* project is a great example of creative front-end development.
 It merges **modern aesthetics**, **smooth interactivity**, and **audio technology** into a single, enjoyable user experience — all within one HTML file.
+**Author:** Sorinesu Adrian 
+**Year:** 2025 
