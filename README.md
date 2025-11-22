@@ -71,4 +71,6 @@ It serves as both an **educational and practical example** of how to combine HTM
 The *“Online Radio Player”* project is a great example of creative front-end development.
 It merges **modern aesthetics**, **smooth interactivity**, and **audio technology** into a single, enjoyable user experience — all within one HTML file.
 
+!!! Some streaming radio stations may be inaccessible after a period of time due to the authors giving up the station or changing the address/access path. !!!
+
 Author: Sorinesu Adrian 
