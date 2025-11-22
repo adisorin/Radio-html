@@ -74,4 +74,7 @@ It merges **modern aesthetics**, **smooth interactivity**, and **audio technolog
 
 !!! Some streaming radio stations may be inaccessible after a period of time due to the authors giving up the station or changing the address/access path. !!!
 
+### What is the idea with this HTML? I'll tell you... The problem is that most phones have wired headphones that require the antenna through the headphone wire..! Now, with this HTML there is NO need for these wired headphones for the antenna. Now if you look at the phones, there is no more radio! Look! It is NO MORE!!!
+
+
 Author: Sorinesu Adrian 
