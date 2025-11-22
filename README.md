@@ -4,6 +4,7 @@ An html file with which you can open a modern graphic of a radio "device" with o
 You don't need to install anything on your device, phone or PC. Just two clicks for PC and one click for phone on the file and the radio starts.
 
 <img width="471" height="800" alt="{355C7884-0461-4EF6-953F-EF61ABB330B8}" src="https://github.com/user-attachments/assets/b1185399-2a27-4883-a62f-41654d65e98c" />
+<img width="524" height="811" alt="image" src="https://github.com/user-attachments/assets/183ae02e-3ae4-4928-8a36-0a266f58ffe0" />
 
 
 ## 🎧 **Presentation: Online Radio Player Web App**
